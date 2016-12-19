@@ -1,0 +1,17 @@
+#!/bin/bash
+
+backgroundFolder='/home/nava/Pictures/unsplash'
+counter=1
+newName="${backgroundFolder}/Background-${counter}.jpg"
+while [ -f "${newName}" ]; do 
+    let counter++
+    newName="${backgroundFolder}/Background-${counter}.jpg"
+done
+
+curl -o "${newName}" $(curl "https://source.unsplash.com/random/1366x768" | awk -F '"' '{print $2}' | sed -- 's/&amp;/\&/g')
+
+if [ -f "${newName}" ]; then
+    feh --bg-scale "${newName}"
+else
+    echo 'Failed' && exit 1
+fi
