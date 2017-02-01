@@ -1,19 +1,26 @@
-"git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-"vim +PluginInstall +qall
 set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'altercation/vim-colors-solarized'
+"Plugin 'altercation/vim-colors-solarized'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'vim-airline/vim-airline'
-Plugin 'scrooloose/nerdcommenter'
+"Plugin 'vim-airline/vim-airline'
+"Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
 Plugin 'valloric/youcompleteme'
+Plugin 'lervag/vimtex'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 call vundle#end()
 filetype plugin indent on
+
+let g:UltiSnipsExpandTrigger="<c-space>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-m>"
+let g:UltiSnipsSnippetsDir="/home/nava/.vim/mysnips"
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnips"]
 
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -26,7 +33,6 @@ filetype plugin indent on
 syntax enable
 colorscheme radicalgoodspeed
 "colorscheme molokai
-"colorscheme elflord
 set pastetoggle=<F1>
 set clipboard=unnamedplus
 set tabstop=4

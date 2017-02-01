@@ -5,7 +5,7 @@ Network() {
     if [ "${WIF}" == "" ]; then
         ETH=$(nmcli con show | grep enp0s25 | awk '{print $1}')
         if [ "${ETH}" == "" ]; then
-            echo ":("
+            echo -e ""
         else
             echo "${ETH}"
         fi

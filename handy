@@ -1,0 +1,156 @@
+df -h   lists partition sizes
+xrdb -merge ~/.Xresources   reloads URxvt
+pacman -Qei | awk '/^Name/ { name=$3 } /^Groups/ { if ( $3 != "base" && $3 != "base-devel" ) { print name } }'
+pacman -Qi <package>    just for more info
+
+Syntastic:
+    :SyntasticToggleMode to turn it off
+    Can still check with :SyntasticCheck
+
+Suspending/killing:
+    Use Ctrl-z to suspend a running process
+    Use "jobs" to list suspended processes
+    Use "ps" to list running process and figure out PID number
+    Use "fg n" to bring it back where n is jobs number
+    Use "kill %n" or "kill PID" to terminate process
+
+Stopwatch
+function countdown(){
+   date1=$((`date +%s` + $1)); 
+   while [ "$date1" -ge `date +%s` ]; do 
+     echo -ne "$(date -u --date @$(($date1 - `date +%s`)) +%H:%M:%S)\r";
+     sleep 0.1
+   done
+}
+function stopwatch(){
+  date1=`date +%s`; 
+   while true; do 
+    echo -ne "$(date -u --date @$((`date +%s` - $date1)) +%H:%M:%S)\r"; 
+    sleep 0.1
+   done
+}
+while true; do echo -ne "`date +%H:%M:%S:%N`\r"; done
+
+ssh root@159.203.12.247 -D 1080
+chromium --proxy-server="socks://localhost:1080"
+
+$start='beginning string'
+$end='ending string'
+awk '/$start/,/$end/' filename
+
+
+if __name__ == '__main__':
+    main()
+from optparse import OptionParser
+
+tail -n +2 aligned.counts | awk '{printf ("%5s\t%s\n", $1, $7)}' > test.counts
+
+tail -n +2 filename     starts file at second line
+head -n -2 filename     ends file at second to last line
+sort -k 2 filename      sorts file by second column
+
+2>&1    can redirect STDERR to STDOUT
+
+ssh alberton@middle-earth.biochem.unr.edu
+134.197.51.210
+
+echo 'export PATH=$PATH:'`pwd` >> $HOME/.bashrc
+
+import matplotlib.pyplot as plt
+plt.style.use('dark_backgroud')
+print(plt.style.available) == ['seaborn-colorblind', 'grayscale', 'seaborn-talk', 'seaborn-bright', 'ggplot', 'seaborn-whitegrid', 'seaborn-dark-palette', 'seaborn-dark', 'seaborn-notebook', 'seaborn-pastel', 'seaborn-muted', 'fivethirtyeight', 'seaborn-paper', 'classic', 'seaborn-white', 'dark_background', 'seaborn-poster', 'seaborn-darkgrid', 'seaborn-ticks', 'seaborn-deep', 'bmh']
+
+def functionTimer(logName):
+    from timeit import default_timer as timer
+    def Timer(function):
+        def Wrapper(*args,**kwargs):
+            with open(logName, 'a') as R:
+                R.write('{} function started\n'.format(function.__name__))
+            t1 = timer()
+            stuff = function(*args)
+            t2 = timer()
+            with open(logName, 'a') as R:
+                R.write('{} function took {:.3f} seconds\n'.format(function.__name__, t2-t1))
+                R.write('{} function finished\n'.format(function.__name__))
+            return stuff
+        return Wrapper
+    return Timer
+    
+scanimage --device epson2:net:192.168.1.23 --mode=Gray --source='Automatic Document Feeder' --format=png > 1040_Page2.png
+
+vim colorschemes:
+molokai
+radicalgoodspeed
+elflord
+
+pyslurm
+celery
+
+paccache -r     # cleans pacman cache leaving latest 3 versions
+
+lpr <file>  # Print file
+
+xprop | grep WM_CLASS   # To find the class name of a window for bspwmrc (click)
+
+robust
+
+shift-esc   to turn off vimperator
+
+To install Vundle packages:
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+'''
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'flazz/vim-colorschemes'
+call vundle#end()
+filetype plugin indent on
+'''
+:source %
+:PluginInstall
+or $vim +PluginInstall +qall
+
+
+To strip spaces of names in current directory
+for f in *\ *; do mv "$f" "${f// /_}"; done     
+
+
+cat - > FILENAME << EOF
+Note: put an EOF at the end to signify end of input
+
+
+tmux kill-session -a    Kill all sessions except most recent one
+tmux kill-session       Kill session
+tmux attach
+tmux detach
+tmux new session -s hi
+
+:%s/\s\+$//e    Removes all whitespace from end of line
+
+pdfeditor
+open, insert text
+
+o-m         in ranger to sort by time
+
+mkdir ~/my-device
+aft-mtp-mount ~/my-device   Mount phone to folder ~/my-device
+fusermount -u ~/my-device   Unmount phone
+
+gdmap -f ~      to see disk usage
+
+sudo grep -H '^psk=' /etc/NetworkManager/system-connections/*   To see wifi passwords
+
+youtube-dl -ci -x --restrict-filenames --audio-format mp3 -o '/home/nava/PopularSongs/%(title)s.%(ext)s' https://www.youtube.com/playlist?list=PLYJK0A6CCIPnKe0gFUPvcw0aqhq3kDfWr;
+
+cat /var/log/pacman.log     pacman history
+
+ctrl-G to show name of file in vim
+
+tmux source-file ~/.tmux.conf   to reload .tmux.conf
+
+gdrive help     for google drive
+
+latexmk -pvc -pdf main.tex
+evince main.pdf

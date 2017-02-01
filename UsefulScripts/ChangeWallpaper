@@ -13,5 +13,5 @@ curl -o "${newName}" $(curl "https://source.unsplash.com/random/1366x768" | awk 
 if [ -f "${newName}" ]; then
     feh --bg-scale "${newName}"
 else
-    echo 'Failed' && exit 1
+    notify-send 'ChangeWallpaper failed' && exit 1
 fi

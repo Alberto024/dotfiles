@@ -36,7 +36,7 @@ selectToClipboard:true
 xterm*bellIsUrgent: true  
 
 URxvt.perl-ext:
-URxvt.perl-ext-common: resize-font
+URxvt.perl-ext-common: resize-font,osc-xterm-clipboard
 
 !URxvt*font: xft:monaco:size=8 
 URxvt.font: xft:Source Code Pro:size=10

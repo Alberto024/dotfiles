@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+
+from functools import partial
+import sys
+
+basetwo = partial(int, base=2)
+print(f"Binary: {sys.argv[1]}\nBase 10: {basetwo(sys.argv[1])}")

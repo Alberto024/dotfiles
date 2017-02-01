@@ -1,0 +1,2 @@
+#!/bin/bash
+import -window root "/home/nava/Pictures/screenshots/$(date +%F_%H%M%S_)screenshot.png"

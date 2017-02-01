@@ -1,9 +1,6 @@
 #!/bin/sh
 
 userresources=$HOME/.Xresources
-usermodmap=$HOME/.Xmodmap
-sysresources=/etc/X11/xinit/.Xresources
-sysmodmap=/etc/X11/xinit/.Xmodmap
 
 # merge in defaults and keymaps
 if [ -f "$userresources" ]; then
@@ -18,12 +15,15 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-#feh --bg-scale /home/nava/Pictures/doge.png
+# MPD daemon start (if no other user instance exists)
+[ ! -s ~/.config/mpd/pid ] && mpd
+
 ~/.fehbg &
 redshift -c /home/nava/.config/redshift.conf &
 xset r rate 200 30 &
 thunar --daemon &
 udiskie &
+xcompmgr -c -C -t-5 -l-5 -r4.2 -o.55 &
 
 sxhkd &
 exec bspwm

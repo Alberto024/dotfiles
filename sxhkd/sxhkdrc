@@ -4,14 +4,17 @@
 
 # terminal emulator
 alt + t
-	urxvt -e tmux
+    urxvt -e bash -c "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session -n$USER -s$USER"
 
 # program launcher
 super + space
-	dmenu_run -b
+    dmenu_run -h 15 -w 500 -x 400 -y 300 -l 8 -p 'Run: ' -fn "Source Code Pro-12:normal" -z -o 0.7 -dim 0.25 -dc "#00BFFF" -sb "#00FF00" -sf "#000000" -nb "#000000" -nf "#00FF00"
 
 alt + w
 	firefox
+
+alt + c
+    ToggleComp
 
 ## show acpi output (battery status)
 super + a
@@ -35,7 +38,7 @@ super + c
 
 # Schedule
 super + v
-    feh ~/Pictures/FALL2016.png
+    feh ~/Pictures/SPRING2017.png
 
 # show output of periodically run update-checking script
 #super + u
@@ -59,6 +62,10 @@ F9
 {F10,F11}
     amixer set Master 5%{-,+} unmute
 
+XF86AudioMute
+    amixer set Master toggle
+{XF86AudioLowerVolume,XF86AudioRaiseVolume}
+    amixer set Master 5%{-,+} unmute
 #
 # bspwm hotkeys
 #

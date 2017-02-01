@@ -1,0 +1,14 @@
+#!/bin/bash
+official_updates=$(checkupdates | awk '{print $1}')
+aur_updates=$(cower -u | awk '{print $2}')
+notify-send -t 0 'UPDATES AVAILABLE' "Official: $(wc -w <<< ${official_updates})\nAUR: $(wc -w <<< ${aur_updates})"
+if [ "${official_updates}" == '' ]; then
+    :
+else
+    notify-send -t 0 'Official' "${official_updates}"
+fi
+if [ "${aur_updates}" == '' ]; then
+    :
+else
+    notify-send -t 0 'AUR' "${aur_updates}"
+fi
