@@ -19,6 +19,8 @@ alias vi="vim"
 alias dlpoly="orterun -np 4 /home/nava/Downloads/dl_class_1.9/execute/DLPOLY.X"
 alias dlg="java -jar /home/nava/Downloads/dl_class_1.9/java/GUI.jar $1 &"
 alias vmd1="vmd -nt -dlpolyhist"
+alias cse="ssh alberton@ubuntu.cse.unr.edu"
+alias latexmake="latexmk -pvc -pdf main.tex"
 alias pacman="pacman --color=always"
 alias pacaur="pacaur --color=always"
 
