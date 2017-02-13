@@ -1,0 +1,51 @@
+#!/bin/bash
+
+dotfilesDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+tmuxFile="$HOME/.tmux.conf"
+if [ -f "${tmuxFile}" ]; then
+    mv "${tmuxFile}" "${tmuxFile}.bak"
+fi
+ln -s "${dotfilesDir}/tmux.conf" "${tmuxFile}"
+
+vimFile="$HOME/.vimrc"
+if [ -f "${vimFile}" ]; then
+    mv "${vimFile}" "${vimFile}.bak"
+fi
+ln -s "${dotfilesDir}/vimrc" "${vimFile}"
+
+bashFile="$HOME/.bashrc"
+if [ -f "${bashFile}" ]; then
+    mv "${bashFile}" "${bashFile}.bak"
+fi
+ln -s "${dotfilesDir}/bashrc" "${bashFile}"
+
+xinitFile="$HOME/.xinitrc"
+if [ -f "${xinitFile}" ]; then
+    mv "${xinitFile}" "${xinitFile}.bak"
+fi
+ln -s "${dotfilesDir}/xinitrc" "${xinitFile}"
+
+xresFile="$HOME/.Xresources"
+if [ -f "${xresFile}" ]; then
+    mv "${xresFile}" "${xresFile}.bak"
+fi
+ln -s "${dotfilesDir}/Xresources" "${xresFile}"
+
+if [ ! -d "$HOME/.vim" ]; then
+    mkdir "$HOME/.vim"
+fi
+
+if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    vim +PluginInstall +qall
+fi
+
+#cd "$HOME/.vim/bundle/youcompleteme"
+#./install.py --clang-completer
+#OR
+#cd "$HOME/.vim/bundle/youcompleteme"
+#mkdir ycm_build
+#cd ycm_build
+#cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON ~/.vim/bundle/youcompleteme/third_party/ycmd/cpp
+#cmake --build . --target ycm_core --config Release

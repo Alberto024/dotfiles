@@ -1,0 +1,24 @@
+#!/bin/bash
+
+sudo pacman -Syu
+
+mkdir -p /tmp/pacaurinstall
+cd /tmp/pacaurinstall
+
+sudo pacman -S expac yajl git --noconfirm --needed
+
+if [ ! -n "$(pacman -Qs cower)" ]; then
+    curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower
+    makepkg -sri PKGBUILD --skippgpcheck --noconfirm
+fi
+
+
+if [ ! -n "$(pacman -Qs pacaur)" ]; then
+    curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur
+    makepkg -sri PKGBUILD --noconfirm
+fi
+
+cd ~
+rm -rf /tmp/pacaurinstall
+
+sudo pacman -S clang vim tmux ranger --noconfirm --needed

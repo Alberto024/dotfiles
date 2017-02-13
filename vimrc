@@ -16,6 +16,7 @@ Plugin 'honza/vim-snippets'
 call vundle#end()
 filetype plugin indent on
 
+let g:ycm_python_binary_path="/usr/bin/python3"
 let g:UltiSnipsExpandTrigger="<c-space>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-m>"
@@ -40,5 +41,5 @@ set shiftwidth=4
 set expandtab
 set smarttab
 set cursorline
-hi clear CursorLine
-hi CursorLine gui=underline cterm=underline
+"hi clear CursorLine
+"hi CursorLine gui=underline cterm=underline

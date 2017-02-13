@@ -19,6 +19,8 @@ alias vi="vim"
 alias dlpoly="orterun -np 4 /home/nava/Downloads/dl_class_1.9/execute/DLPOLY.X"
 alias dlg="java -jar /home/nava/Downloads/dl_class_1.9/java/GUI.jar $1 &"
 alias vmd1="vmd -nt -dlpolyhist"
+alias pacman="pacman --color=always"
+alias pacaur="pacaur --color=always"
 
 export PATH=$PATH:/home/nava/.config/bspwm/panel:/usr/local/bin/xcrysden-1.5.60-bin-semishared:/home/nava/bin:/usr/local/gromacs/gromacs-5.1.4/bin
 export EDITOR="vim"
