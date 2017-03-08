@@ -32,6 +32,14 @@ if [ -f "${xresFile}" ]; then
 fi
 ln -s "${dotfilesDir}/Xresources" "${xresFile}"
 
+if [ ! -d "$HOME/bin" ]; then
+    mkdir "$HOME/bin"
+fi
+
+if [ ! -f "$HOME/bin/ranger" ]; then
+    ln -s "${dotfilesDir}/ranger/ranger.py" "$HOME/bin/ranger"
+fi
+
 if [ ! -d "$HOME/.vim" ]; then
     mkdir "$HOME/.vim"
 fi
@@ -41,8 +49,8 @@ if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
     vim +PluginInstall +qall
 fi
 
-#cd "$HOME/.vim/bundle/youcompleteme"
-#./install.py --clang-completer
+cd "$HOME/.vim/bundle/youcompleteme"
+./install.py --clang-completer
 #OR
 #cd "$HOME/.vim/bundle/youcompleteme"
 #mkdir ycm_build
