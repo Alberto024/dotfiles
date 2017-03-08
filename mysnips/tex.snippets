@@ -1,0 +1,105 @@
+snippet left
+{\left$1 $0 \right$2}
+endsnippet
+
+snippet leftp
+{\left( $0 \right)}
+endsnippet
+
+snippet tpar
+{\left( \frac{\partial $1}{\partial $2} \right)}_{$3} $0
+endsnippet
+
+snippet spar
+\frac{\partial}{\partial $1}{\left( $3 \right)}_{$2} $0
+endsnippet
+
+snippet htb
+\begin{empheq}[box=\tcbhighmath]{align}
+	$0
+\end{empheq}
+endsnippet
+
+snippet inte
+\int_{$1}^{$2} $0
+endsnippet
+
+snippet gat
+\begin{gather}
+	$0
+\end{gather}
+endsnippet
+
+snippet energyb
+\begin{equation}
+	\begin{aligned}
+		\Delta E = \sum_{i} \delta Q^{i}_\sigma + \sum_{i} \delta
+		W^{i}_{s} + \delta W_{EC} + \sum_{i} \delta W^{i}_{other} &+
+		\sum^{in}_{i} \left( H_{i}^{in} + \frac{1}{2}
+		{\left( v_{i}^{in} \right)}^{2} + g z^{in} \right)
+		\delta m^{in}_{i} \\ &-
+		\sum^{out}_{i} \left( H_{i}^{out} + \frac{1}{2}
+		{\left(v_i^{out}\right)}^2 + gz^{out} \right) \delta m^{out}_i
+	\end{aligned}
+\end{equation}
+endsnippet
+
+snippet fig
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{$1}
+	\caption{$2}
+\label{fig:$3}
+\end{figure}
+$0
+endsnippet
+
+snippet start
+\documentclass{report}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx} % for pictures
+\usepackage{siunitx} % for \num and \SI
+\usepackage{booktabs} % for tables
+\usepackage{gensymb} % for \degree{}
+
+%% For Highlighting %%
+\usepackage{xcolor} % part of soul
+\usepackage{soul} % for highlighting
+\usepackage{empheq} % for highlighting equations
+\usepackage[many]{tcolorbox} % part of empheq
+\tcbset{highlight math style={colback=yellow,
+        arc=0pt,
+        outer arc=0pt,
+        boxrule=0pt,
+        top=2pt,
+        bottom=2pt,
+        left=2pt,
+        right=2pt
+    }
+}
+% End Highlighting %%
+
+\usepackage[width=175mm,top=12mm,bottom=20mm]{geometry}
+
+\graphicspath{{/home/nava/Pictures/}}
+
+\title{{Assignment 1}\\\
+{\large University of Nevada, Reno}\\\
+{\large Chemical Engineering Department}\\\
+{\large CHE361 Spring 2017}\\\
+{\includegraphics[scale=0.5]{unrwolf.png}}
+}
+\author{Alberto Nava}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{Problem 1}
+$0
+
+\end{document}
+endsnippet
