@@ -38,7 +38,6 @@ with open(jsonPath,'w') as J:
     json.dump(JSON, J, sort_keys=True, indent=4)
 with open(tablePath,'w') as T:
     T.write('\n'.join(Metadata))
-raise SystemExit
 
 print('#'*40)
 print('START')
