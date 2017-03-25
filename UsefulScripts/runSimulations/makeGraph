@@ -4,13 +4,10 @@ import numpy as np
 import subprocess
 import os
 import time
+import json
 beginTime = time.time()
 
 CD = os.getcwd()
-numVars =  3
-numTrials = 3
-testAs = np.linspace(1.0,128.0,numVars)
-testTemps = np.linspace(0.1,2.0,numTrials)
 
 baseProject=os.path.join(CD,'SimulationProject')
 if os.path.isdir(baseProject):
@@ -20,6 +17,28 @@ else:
         os.mkdir(baseProject)
     except:
         raise SystemExit('Could not make project path')
+
+numVars =  3
+numTrials = 3
+testAs = np.linspace(1.0,128.0,numVars)
+testTemps = np.linspace(0.1,2.0,numTrials)
+
+Metadata = ['Path\tAvalue\tTvalue']
+JSON = {}
+for i,A in enumerate(testAs):
+    JSON['A{}'.format(i+1)] = {}
+    for j,T in enumerate(testTemps):
+        JSON['A{}'.format(i+1)]['T{}'.format(j+1)] = {}
+        JSON['A{}'.format(i+1)]['T{}'.format(j+1)]['Avalue'] = A
+        JSON['A{}'.format(i+1)]['T{}'.format(j+1)]['Temp'] = T
+        Metadata.append('A{}/temp{}\t{}\t{}'.format(i+1,j+1,A,T))
+jsonPath = os.path.join(baseProject,'Metadata.json')
+tablePath = os.path.join(baseProject,'Metadata.tab')
+with open(jsonPath,'w') as J:
+    json.dump(JSON, J, sort_keys=True, indent=4)
+with open(tablePath,'w') as T:
+    T.write('\n'.join(Metadata))
+raise SystemExit
 
 print('#'*40)
 print('START')
