@@ -1,0 +1,87 @@
+#!/usr/bin/python3
+
+import numpy as np
+import subprocess
+import os
+import time
+beginTime = time.time()
+
+CD = os.getcwd()
+numVars =  3
+numTrials = 3
+testAs = np.linspace(1.0,128.0,numVars)
+testTemps = np.linspace(0.1,2.0,numTrials)
+
+baseProject=os.path.join(CD,'SimulationProject')
+if os.path.isdir(baseProject):
+    raise SystemExit('Need a different project path')
+else:
+    try:
+        os.mkdir(baseProject)
+    except:
+        raise SystemExit('Could not make project path')
+
+print('#'*40)
+print('START')
+print('#'*40)
+print('\n')
+acounter=1
+for Avar in testAs:
+    aPath = os.path.join(baseProject,f'A{acounter}')
+    if os.path.isdir(aPath):
+        raise SystemExit('Need a different apath')
+    else:
+        try:
+            os.mkdir(aPath)
+        except:
+            raise SystemExit('Could not make apath')
+    os.chdir(aPath)
+
+    print('Z'*40)
+    print(f'Started running simulations for A#{acounter}...')
+    print('='*40)
+    aTime = time.time()
+    
+    RoG = []
+    
+    counter=1
+    command = r"{{ time -p runSimulation ~/Project/dlmesotest/makestuff/runSimulations/FC {} {}; }} > DLMESO_{}.log 2>&1"
+    for temp in testTemps:
+        print(f'Started running simulation for T#{counter}...')
+        print('-'*40)
+        testPath = os.path.join(aPath,f'temp{counter}')
+        newCommand = command.format(temp,Avar,counter)
+        subprocess.run(newCommand,
+                            check=True,
+                            shell=True,
+                            executable='/bin/bash')
+        with open(os.path.join(testPath,'radius_polymer'),'r') as F:
+            Stuff = F.readlines()
+        counter += 1
+        RoG.append(Stuff[-1].split(' ')[-1].strip())
+    print(f'Done running simulations for A#{acounter}')
+    print('-'*40)
+    print(f'Started writing results for A#{acounter}')
+    print('-'*40)
+    radiusFile = os.path.join(aPath,f'radius_{acounter}.dat')
+    with open(radiusFile,'w') as F:
+        F.write('\n'.join(f'{a},{b}' for a,b in zip(testTemps,RoG)))
+    plotcommand = f"plotRadius {radiusFile} radiusplot_{acounter}.pdf"
+    subprocess.run(plotcommand,
+                        check=True,
+                        shell=True,
+                        executable='/bin/bash')
+    print('Done writing results')
+    print('-'*40)
+    print(f'Time for A#{acounter}: {time.time()-aTime:.1f} seconds')
+    print('*'*40)
+    print('\n')
+
+    acounter += 1
+
+print('#'*40)
+print('FINISHED')
+print('#'*40)
+
+endTime = time.time()
+print(f'Total Time taken: {endTime-beginTime:.1f} seconds')

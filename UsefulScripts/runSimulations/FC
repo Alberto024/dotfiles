@@ -1,0 +1,9 @@
+Height=6
+curlyness=1j
+bondtype='harm'
+bondparams=(20.0,0.25)
+inttype='dpd'
+intparams=(1.0,6.75)
+V=4000.0
+S=2000
+EQS=0

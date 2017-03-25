@@ -1,0 +1,20 @@
+#!/usr/bin/python3
+
+import pandas as pd
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+import sys
+import os
+
+dataPath = str(sys.argv[1])
+toName = str(sys.argv[2])
+dataFolder = os.path.dirname(os.path.abspath(dataPath))
+Data = pd.read_csv(dataPath,sep=',',header=None)
+
+plt.figure()
+plt.plot(Data[0],Data[1],'o-')
+plt.xlabel(r'$k_{B}T$')
+plt.ylabel('Radius of Gyration')
+plt.title('Radius of Gyration vs Temperature')
+plt.savefig(f'{dataFolder}/{toName}',bbox_inches='tight')
+#plt.show()
