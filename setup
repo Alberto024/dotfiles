@@ -44,6 +44,11 @@ if [ ! -d "$HOME/.vim" ]; then
     mkdir "$HOME/.vim"
 fi
 
+if [ ! -d "$HOME/.vim/mysnips" ]; then
+    mv "$HOME/.vim/mysnips" "$HOME/.vim/mysnips.bak"
+fi
+ln -s "${dotfilesDir}/mysnips" "$HOME/.vim/mysnips"
+
 if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     vim +PluginInstall +qall

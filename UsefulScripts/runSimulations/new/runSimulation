@@ -1,0 +1,27 @@
+#!/bin/bash
+
+controlConfig=$1
+temperature=$2
+Avalue=$3
+kvalue=$4
+
+counter=1
+newName="T${counter}"
+while [ -d "${newName}" ]; do
+    let counter++
+    newName="T${counter}"
+done
+mkdir "${newName}"
+cd "${newName}"
+
+echo "Creating Input files for Temperature: ${temperature} and A: ${Avalue} and k: ${kvalue}..."
+createInput "${controlConfig}" "${temperature}" "${Avalue}" "${kvalue}"
+
+rm polymer.dat coords.dat
+
+dpd
+
+sleep 1
+Traject 1
+radius.exe 1
+echo 'Average of last 25 Radius of Gyrations: ' $(tail -n25 radius_polymer | awk -v N=4 '{ sum += $N } END { if (NR > 0) print sum/NR }')
