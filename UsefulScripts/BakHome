@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#dated=$(date +"%m_%d_%y")
+#filename="home_${dated}"
+#path='/media/data'
+
+#lrztar -o "${path}/${filename}" -p 4 $HOME 
+rsync -aAXS --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/*/.gvfs"} / /media/data/MiniBackup

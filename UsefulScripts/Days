@@ -1,0 +1,3 @@
+#!/usr/bin/python3
+import datetime as dt
+print(f'Days Needed: {(dt.date.today() - dt.date(2017,2,13)).days}')

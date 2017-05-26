@@ -1,0 +1,6 @@
+#!/bin/bash
+
+jupyterBase=$1
+unzip "${jupyterBase}.zip"
+pandoc --listings -f markdown -t latex "${jupyterBase}.md" -o "${jupyterBase}.tex"
+sed -ie "s#output#$(pwd)/output#g" "${jupyterBase}.tex"

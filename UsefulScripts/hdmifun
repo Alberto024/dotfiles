@@ -1,0 +1,28 @@
+#! /bin/sh
+
+hdmi=$1	#1 or 0 or 2
+if [ $hdmi -eq "1" ]; then
+    device=3
+    xrandr --output LVDS-1 --auto --fb 1920x1080i --panning 1920x1080* --output HDMI-1 --mode 1920x1080i --same-as LVDS-1 &
+    xset s off &
+    xset -dpms &
+    pkill -USR1 redshift &
+elif [ $hdmi -eq "2" ]; then
+    device=0
+    xrandr --output LVDS-1 --auto --fb 1920x1080 --panning 1920x1080* --output HDMI-1 --mode 1920x1080 --same-as LVDS-1 &
+    xset s off &
+    xset -dpms &
+else
+    device=0
+    xset s on &
+    xset +dpms &
+    xrandr -s 0 &
+    pkill -USR1 redshift &
+fi
+
+
+cat > ~/.asoundrc <<EOF
+defaults.pcm.card 0
+defaults.pcm.device $device
+defaults.ctl.card 0
+EOF

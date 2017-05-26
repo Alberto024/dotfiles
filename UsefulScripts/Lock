@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/bin/i3lock-fancy -g -f liberation-sans-bold -t "Password" -- /usr/bin/scrot -z

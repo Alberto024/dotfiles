@@ -1,0 +1,3 @@
+#!/bin/bash
+
+vmd -e /home/nava/Project/dpd-scripts/fixpbc_startup.vmd traject.vtf

@@ -1,0 +1,32 @@
+#!/usr/bin/python3
+
+"""Usage:
+    Plot3d [options] <file>
+
+Options:
+    -h, --help
+        Show this screen and exit
+    --version
+        Show version and exit
+    -d <delimeter>
+        Use a different delimiter [default: ,]
+
+Example:
+    Plot3d -d '\t' my_tab_delimited_file.tab"""
+
+from docopt import docopt
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import pandas as pd
+plt.style.use('ggplot')
+
+def main(args):
+    Data = pd.read_csv(args['<file>'], sep=args['-d'], header=None)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot(Data[0], Data[1], Data[2], 'o-')
+    plt.show()
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__,version='Plot3d version 1.0\nAuthor: Alberto Nava')
+    main(arguments)

@@ -8,8 +8,6 @@ else:
     import gi
     gi.require_version('Notify', '0.7')
     from gi.repository import Notify
-    Notify.init("Python Calculator")
-    sys.version.split(' ')[0]
     Result = Notify.Notification.new(f"Python {sys.version.split(' ')[0]} Calculator",
             f"{sys.argv[1]} = \n{eval(sys.argv[1]):,}", "dialog-information")
     Result.show()

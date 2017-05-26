@@ -1,0 +1,3 @@
+#!/bin/bash
+filename=$1
+tail -n1 "${filename}" | awk '{print $4}'

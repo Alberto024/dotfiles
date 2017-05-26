@@ -1,0 +1,4 @@
+#!/bin/bash
+
+classesKey=$(gdrive sync list --no-header | grep 'Classes-bak' | awk '{print $1}')
+gdrive sync upload /home/nava/Classes "${classesKey}"

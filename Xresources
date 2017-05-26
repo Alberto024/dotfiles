@@ -1,34 +1,36 @@
-URxvt*background:           #000000
-URxvt*foreground:           #1FD8FF
-URxvt*cursorColor:          #6699CC
+#include "/home/nava/.config/base16-xresources/xresources/base16-3024-256.Xresources"
+urxvt*depth: 32
+urxvt*background: rgba:0000/0000/0200/c800
 
-
-!Visiblue
-
-!black
-URxvt*color0:               #333366
-URxvt*color8:               #97BEE6
-!red
-URxvt*color1:               #6666CC
-URxvt*color9:               #9999FF
-!green
-URxvt*color2:               #0099CC
-URxvt*color10:              #00CCFF
-!yellow
-URxvt*color3:               #3366CC
-URxvt*color11:              #6699FF
-!blue
-URxvt*color4:               #006699
-URxvt*color12:              #0099CC
-!magneta
-URxvt*color5:               #0066FF
-URxvt*color13:              #0099FF
-!cyan
-URxvt*color6:               #669999
-URxvt*color14:              #66CCCC
-!white
-URxvt*color7:		   #B8D6FF
-URxvt*color15:             #B8EDFF
+!!Visiblue
+!URxvt*background:           #000000
+!URxvt*foreground:           #1FD8FF
+!URxvt*cursorColor:          #6699CC
+!
+!!black
+!URxvt*color0:               #333366
+!URxvt*color8:               #97BEE6
+!!red
+!URxvt*color1:               #6666CC
+!URxvt*color9:               #9999FF
+!!green
+!URxvt*color2:               #0099CC
+!URxvt*color10:              #00CCFF
+!!yellow
+!URxvt*color3:               #3366CC
+!URxvt*color11:              #6699FF
+!!blue
+!URxvt*color4:               #006699
+!URxvt*color12:              #0099CC
+!!magneta
+!URxvt*color5:               #0066FF
+!URxvt*color13:              #0099FF
+!!cyan
+!URxvt*color6:               #669999
+!URxvt*color14:              #66CCCC
+!!white
+!URxvt*color7:		   #B8D6FF
+!URxvt*color15:             #B8EDFF
 
 backarrowKeyIsErase: true
 locale: true
@@ -39,8 +41,13 @@ URxvt.perl-ext:
 URxvt.perl-ext-common: resize-font,osc-xterm-clipboard
 
 !URxvt*font: xft:monaco:size=8 
-URxvt.font: xft:Source Code Pro:size=10
-URxvt.boldFont: xft:Source Code Pro:bold:size=10
+URxvt.font: xft:Source Code Pro:size=12
+URxvt.boldFont: xft:Source Code Pro:bold:size=12
+!URxvt.font: xft:Fira Code:size=10
+!URxvt.boldFont: xft:Fira Code:bold:size=10
+Xft.hintstyle: hintslight
+Xft.hinting: 1
+Xft.antialias: 1
 
 !URxvt.perl-ext-common: vtwheel,resize-font.
 URxvt.resize-font.smaller: A-Left
@@ -57,8 +64,10 @@ URxvt.letterSpace: 0
   
 Xcursor.size : 16
 
-URxvt*.transparent: true
-! URxvt*.shading: 0 to 99 darkens, 101 to 200 lightens
-URxvt*.shading: 30
-URxvt*tintColor: Red
-URxvt*.depth: 64
+!!URxvt*.transparent: true
+!!! URxvt*.inheritPixmap: true
+!!! URxvt*.shading: 0 to 99 darkens, 101 to 200 lightens
+!!URxvt*.shading: 30
+!!URxvt*.shading: 80
+!!URxvt*tintColor: Red
+!!URxvt*.depth: 64
