@@ -1,5 +1,10 @@
 # dotfiles
 
+![clean](screenshots/clean.png)
+![screenfetch](screenshots/screenfetch.png)
+![ranger_and_dunst](screenshots/ranger_and_dunst.png)
+![vim_tmux](screenshots/vim_tmux.png)
+
 ## Software
 
 + **bspwm** _window manager_
