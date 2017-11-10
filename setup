@@ -6,31 +6,31 @@ tmuxFile="$HOME/.tmux.conf"
 if [ -f "${tmuxFile}" ]; then
     mv "${tmuxFile}" "${tmuxFile}.bak"
 fi
-cp "${dotfilesDir}/tmux.conf" "${tmuxFile}"
+cp "${dotfilesDir}/.tmux.conf" "${tmuxFile}"
 
 vimFile="$HOME/.vimrc"
 if [ -f "${vimFile}" ]; then
     mv "${vimFile}" "${vimFile}.bak"
 fi
-cp "${dotfilesDir}/vimrc" "${vimFile}"
+cp "${dotfilesDir}/.vimrc" "${vimFile}"
 
 bashFile="$HOME/.bashrc"
 if [ -f "${bashFile}" ]; then
     mv "${bashFile}" "${bashFile}.bak"
 fi
-cp "${dotfilesDir}/bashrc" "${bashFile}"
+cp "${dotfilesDir}/.bashrc" "${bashFile}"
 
 xinitFile="$HOME/.xinitrc"
 if [ -f "${xinitFile}" ]; then
     mv "${xinitFile}" "${xinitFile}.bak"
 fi
-cp "${dotfilesDir}/xinitrc" "${xinitFile}"
+cp "${dotfilesDir}/.xinitrc" "${xinitFile}"
 
 xresFile="$HOME/.Xresources"
 if [ -f "${xresFile}" ]; then
     mv "${xresFile}" "${xresFile}.bak"
 fi
-cp "${dotfilesDir}/Xresources" "${xresFile}"
+cp "${dotfilesDir}/.Xresources" "${xresFile}"
 
 if [ ! -d "$HOME/bin" ]; then
     mkdir "$HOME/bin"
