@@ -1,0 +1,2 @@
+#!/bin/sh
+exec 'feh' '--bg-scale' '/home/nava/Pictures/unsplash/Background-65.jpg' 

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+projectKey=$(gdrive sync list --no-header | grep 'Project-bak' | awk '{print $1}')
+gdrive sync upload --keep-local /home/nava/Project "${projectKey}"

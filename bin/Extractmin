@@ -1,0 +1,8 @@
+#!/bin/bash
+
+filename=$1
+if [ ! -f "${filename}" ]; then
+    echo 'File does not exist'
+    exit 1
+fi
+awk '/Step Fmax/,/Loop time /' "${filename}" | head -n -2 | tail -n +2 | awk '{print $1,$3}' | Plotstdin -d' '

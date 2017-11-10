@@ -1,0 +1,7 @@
+#!/bin/bash
+
+BATTINFO=$(acpi -b)
+if [[ $(echo $BATTINFO | grep Discharging) &&
+      $(echo $BATTINFO | cut -f 4 -d " " | tr -d "%,") -lt 55 ]]; then
+    /usr/bin/notify-send -u "critical" -t 0 "LOW BATTERY" "$BATTINFO"
+fi

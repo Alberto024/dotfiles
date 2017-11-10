@@ -1,0 +1,89 @@
+snippet left
+{\left$1 $3 \right$2}$0
+endsnippet
+
+snippet leftp
+{\left( $1 \right)}$0
+endsnippet
+
+snippet tpar
+{\left( \frac{\partial $1}{\partial $2} \right)}_{$3} $0
+endsnippet
+
+snippet spar
+\frac{\partial}{\partial $1}{\left( $3 \right)}_{$2} $0
+endsnippet
+
+snippet htb
+\begin{empheq}[box=\tcbhighmath]{align}
+	$0
+\end{empheq}
+endsnippet
+
+snippet inte
+\int_{$1}^{$2} $0
+endsnippet
+
+snippet gat
+\begin{gather}
+	$0
+\end{gather}
+endsnippet
+
+snippet sqrt
+\sqrt{$1} $0
+endsnippet
+
+snippet newc
+\newcommand{\\$1}{$2}$0
+endsnippet
+
+snippet energyb
+\begin{equation}
+	\begin{aligned}
+		\Delta E = \sum_{i} \delta Q^{i}_\sigma + \sum_{i} \delta
+		W^{i}_{s} + \delta W_{EC} + \sum_{i} \delta W^{i}_{other} &+
+		\sum^{in}_{i} \left( H_{i}^{in} + \frac{1}{2}
+		{\left( v_{i}^{in} \right)}^{2} + g z^{in} \right)
+		\delta m^{in}_{i} \\ &-
+		\sum^{out}_{i} \left( H_{i}^{out} + \frac{1}{2}
+		{\left(v_i^{out}\right)}^2 + gz^{out} \right) \delta m^{out}_i
+	\end{aligned}
+\end{equation}
+endsnippet
+
+snippet fig
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{$1}
+	\caption{$2}
+\label{fig:$3}
+\end{figure}
+$0
+endsnippet
+
+snippet tabl
+\begin{table}[htpb]
+	\centering
+	\caption{$2}
+	\begin{tabular}{$3}
+		\toprule
+		$4
+		\\\
+		\rowcolor{lightgray}
+		\midrule
+
+		\\\
+		\bottomrule
+	\end{tabular}
+\label{tab:$1}
+\end{table}
+endsnippet
+
+snippet cet
+$\ce{$1}$$0
+endsnippet
+
+snippet ln
+\ln{\left( $1 \right)}$0
+endsnippet

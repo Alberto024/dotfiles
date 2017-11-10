@@ -1,0 +1,254 @@
+#!/usr/bin/python3
+
+# NOTE: MUST EXECUTE ON A NODE
+
+"""Usage:
+    Smart [options]
+
+Options:
+    -h, --help
+        Show this help then exit
+    --version
+        Show version number
+    -t <targetmax>, --target <targetmax>
+        Number to optimize to [default: 0.08]
+    -m <targetmin>, --min <targetmin>
+        Number to optimize to [default: -0.1163064]
+    -l <minlocation>, --loc <minlocation>
+        Where to have minimum [default: 3.75]
+    -r <rcut>, --rcut <rcut>
+        Cutoff radius [default: 20]
+    -a <alpha>, --alpha <alpha>
+        Exponent lj alpha [default: 18]
+    -i <initfile>, --init <initfile>
+        Initialize the bayesian optimization procedure with
+        previous output generated in a json file"""
+VERSION='Beta Version\nAuthor: Alberto Nava'
+
+################################################################
+# Importations
+################################################################
+
+from docopt import docopt
+import pandas as pd
+import numpy as np
+from bayes_opt import BayesianOptimization
+from timeit import default_timer as timer
+from time import strftime, gmtime
+from pprint import pprint
+import os
+import subprocess
+import json
+import matplotlib.pyplot as plt
+import glob
+
+################################################################
+# Utilities
+################################################################
+
+def checkMaxCPU(arguments):
+    """ Arguments:
+            arguments : dictionary; CLI arguments from docopt
+        Returns:
+            int or None; the max number of CPU to use, if None
+                         then there is no limit
+        Checks --threads option from CLI, if option not given
+        then default is to use all available CPU
+    """
+    # Returning a maximum CPU value if given
+    if arguments['--threads']:
+        if arguments['--threads'].isdigit():
+            Max = int(arguments['--threads'])
+            if Max > 0:
+                return Max
+            else:
+                raise SystemExit('--threads less than 0')
+        else:
+            raise SystemExit('Invalid value to --threads: {}'.format(
+                        arguments['--threads']))
+
+def getExecutionDir():
+    """	Arguments:
+            None
+        Returns:
+            newName : str; name for next input file
+        Looks for input files in current directory to find a 
+        name that would work for next input file
+    """
+    templateName = os.path.join(os.getcwd(), "BayOpt_DPD_{:04d}")
+    run = 1
+    while True:
+        newName = templateName.format(run)
+        if not os.path.isdir(newName):
+            break
+        run += 1 
+    return newName
+
+def initializeBayOpt(Args):
+    """	Arguments:
+            Args : dict; CLI arguments from docopt
+        Returns:
+            dict containing init steps
+    """
+    ERargs = {
+            "<data>": Args['--init'],
+            "--outfile": None,
+            "--force": False,
+            "--json": 'BayOpt_init.json'
+            }
+    ExtractRes.main(ERargs)
+    with open('BayOpt_init.json', 'r') as F:
+        jsonData = json.load(F)
+    return jsonData
+
+def yukawa(r,A,X,S,E):
+    alpha = float(ARGS['--alpha'])
+    rcut = float(ARGS['--rcut'])
+    xi = X
+    sigma = S
+    eps = E
+    return (A*np.exp(-r/xi))/(r/xi) + (4*eps*((sigma/r)**(2*alpha) - (sigma/r)**(alpha)))
+
+def targetFunction(A,X,S,E):
+    """	Arguments:
+            "A":        (0, 10),
+            "X":        (0, 10),
+            "S":        (1, 5),
+            "E":        (0, 10),
+        Returns:
+            MAGIC_PARAMETER : float; parameter to describe
+                                success of simulation
+        Target Function that takes parameters which change the
+        behavior of the simulation
+    """
+    targetMin = float(ARGS['--min'])
+    targetMax = float(ARGS['--target'])
+    minLocation = float(ARGS['--loc'])
+    Timestep = 2e-3
+    r0 = np.arange(0, Timestep*20, Timestep, dtype=np.float64)
+    zeros = np.zeros(r0.shape, dtype=np.float64)+10000.0
+    r = np.arange(Timestep*20,
+                  float(ARGS['--rcut'])+1+Timestep,
+                  Timestep,
+                  dtype=np.float64)
+    totalR = np.concatenate((r0,r))
+    try:
+        Y = np.concatenate((zeros,  yukawa(r,A,X,S,E)))
+    except ValueError:
+        Y = np.concatenate((zeros, r))
+    minError = (Y.min() - targetMin)**2
+    minLocError = (totalR[Y.argmin()] - minLocation)**2
+    maxError = (Y[Y.argmin():].max() - targetMax)**2
+    print('MinError:{}\nMinLocError:{}\nMaxError{}\n'.format(minError,minLocError,maxError))
+    MAGIC_PARAMETER = -(minError + minLocError + maxError)
+    return MAGIC_PARAMETER
+
+################################################################
+# Plotting
+################################################################
+#import matplotlib.pyplot as plt
+#from matplotlib import gridspec
+#plt.style.use('ggplot')
+#def posterior(bo, x, xlim):
+#    xmin, xmax = xlim
+#    bo.gp.fit(bo.X, bo.Y)
+#    mu, sigma = bo.gp.predict(x, return_std=True)
+#    return mu, sigma
+#
+#def plot_gp(bo, x, y, xlim):
+#    
+#    #fig = plt.figure(figsize=(16, 10))
+#    fig = plt.figure(figsize=(8,5))
+#    fig.suptitle('Gaussian Process and Utility Function After {} Steps'.format(len(bo.X)), fontdict={'size':30})
+#    
+#    gs = gridspec.GridSpec(2, 1, height_ratios=[3, 1]) 
+#    axis = plt.subplot(gs[0])
+#    acq = plt.subplot(gs[1])
+#    
+#    mu, sigma = posterior(bo, x, xlim)
+#    axis.plot(x, y, linewidth=3, label='Target')
+#    axis.plot(bo.X.flatten(), bo.Y, 'D', markersize=8, label=u'Observations', color='r')
+#    axis.plot(x, mu, '--', color='k', label='Prediction')
+#
+#    axis.fill(np.concatenate([x, x[::-1]]), 
+#              np.concatenate([mu - 1.9600 * sigma, (mu + 1.9600 * sigma)[::-1]]),
+#        alpha=.6, fc='c', ec='None', label='95% confidence interval')
+#    
+#    axis.set_xlim(xlim)
+#    axis.set_ylim((None, None))
+#    axis.set_ylabel('f(x)', fontdict={'size':20})
+#    axis.set_xlabel('x', fontdict={'size':20})
+#    
+#    utility = bo.util.utility(x, bo.gp, 0)
+#    acq.plot(x, utility, label='Utility Function', color='purple')
+#    acq.plot(x[np.argmax(utility)], np.max(utility), '*', markersize=15, 
+#             label=u'Next Best Guess', markerfacecolor='gold', markeredgecolor='k', markeredgewidth=1)
+#    acq.set_xlim(xlim)
+#    acq.set_ylim((0, np.max(utility) + 0.5))
+#    acq.set_ylabel('Utility', fontdict={'size':20})
+#    acq.set_xlabel('x', fontdict={'size':20})
+#    
+#    axis.legend(loc=2, bbox_to_anchor=(1.01, 1), borderaxespad=0.)
+#    acq.legend(loc=2, bbox_to_anchor=(1.01, 1), borderaxespad=0.)
+#
+#    plt.show()
+
+################################################################
+# Main
+################################################################
+
+def main(Arguments):
+    """	Arguments:
+            Arguments : dict; CLI arguments from docopt
+        Returns:
+            None
+    """
+    beginTime = timer()
+    ############################################################
+    # Just for viz
+    #x = np.linspace(1, 500, 100).reshape(-1, 1)
+    #y = targetFunction(x)
+    #y = sigmoid(x, 10, 1000, 225)
+    ############################################################
+
+    varDomain = {
+            "A":        (0, 1),
+            "X":        (0, 15),
+            "S":        (3, 4),
+            "E":        (0, 1),
+            }
+    bo = BayesianOptimization(targetFunction,
+                              varDomain)
+    probePoints = {
+            "A":        [0.1, 0.02],
+            "X":        [10.0, 10.0],
+            "S":        [3.62, 3.62],
+            "E":        [0.3, 0.15]
+            }
+    bo.explore(probePoints)
+    # kappa = aggressiveness parameter
+    bo.maximize(init_points=2, n_iter=0, acq='ucb', kappa=5)
+    #plot_gp(bo, x, y, (-50,50))
+    for i in range(100):
+        bo.maximize(init_points=0, n_iter=1, acq='ucb', kappa=5)
+        with open('BayOpt_Step_{:04d}.json'.format(i), 'w') as BOlog:
+            json.dump(bo.res['all'],
+                      BOlog,
+                      sort_keys=True,
+                      indent=4)
+        with open('BayOpt_Best.json'.format(i), 'w') as BOBestLog:
+            json.dump(bo.res['max'],
+                      BOBestLog,
+                      sort_keys=True,
+                      indent=4)
+    #    #plot_gp(bo, x, y, (-50,50))
+    ############################################################
+    endTime = timer()
+    print('Complete Bayesian Optimization Total time elapsed: {}'.format(
+        str(strftime('%H:%M:%S', gmtime(endTime - beginTime)))))
+
+################################################################
+if __name__ == "__main__":
+    global ARGS
+    ARGS = docopt(__doc__,version=VERSION)
+    main(ARGS)

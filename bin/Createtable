@@ -1,0 +1,224 @@
+#!/usr/bin/python3
+
+"""Usage:
+    Createtable [options]
+
+Options:
+    -h, --help
+        Show this help then exit
+    --version
+        Show version number
+    -q, --quiet
+        Do not print anything to STDOUT
+    -o <outputfile>, --output <outputfile>
+        Where to save table [default: aoth2o-min_ZRS_ZRS.xvg]
+    -r, --rcut <rcutvalue>
+        Rcut is largest cutoff distance specified in mdp file
+        in nm [default: 4.0]
+    -p, --plot
+        Used to plot SALR potential
+    -z <axis>, --zoom <axis>
+        Zoom to a specific area in plot. Give <axis> as:
+            leftX,rightX,bottomY,topY"""
+VERSION='Beta Version\nAuthor: Alberto Nava'
+
+################################################################
+# Importations
+################################################################
+
+from docopt import docopt
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from timeit import default_timer as timer
+from time import strftime, gmtime
+plt.style.use('ggplot')
+
+################################################################
+# Utilities
+################################################################
+
+def f(r):
+    """	Arguments:
+            r : float; interatomic distance
+        Returns:
+            electrostatic interaction
+        Note: always need it by default even if you don't use it
+    """
+    return 1/r
+
+def df(r):
+    """	Arguments:
+            r : float; interatomic distance
+        Returns:
+            electrostatic interaction
+        Note: always need it by default even if you don't use it
+        Note: First derivative of f
+    """
+    return -1/r**2
+
+def g(r,C=1):
+    """	Arguments:
+            r : float; interatomic distance
+            C : float; strength parameter
+        Returns:
+            float; interatomic non-bonded potential - 
+            dispersion interaction
+    """
+    return -C/r**6
+
+def dg(r,C=1):
+    """	Arguments:
+            r : float; interatomic distance
+            C : float; strength parameter
+        Returns:
+            float; interatomic non-bonded potential - 
+            dispersion interaction
+        First derivative of g
+    """
+    return (-6*C)/r**7
+
+def h(r,A=1):
+    """	Arguments:
+            r : float; interatomic distance
+            A : float; strength parameter
+        Returns:
+            float; interatomic non-bonded potential - short
+            range repulsion
+    """
+    return A/r**12
+
+def dh(r,A=1):
+    """	Arguments:
+            r : float; interatomic distance
+            A : float; strength parameter
+        Returns:
+            float; interatomic non-bonded potential - short
+            range repulsion
+        First derivative of h
+    """
+    return (-12*A)/r**13
+
+def yukawa(r, A=0.08, xi=12.0):
+    """	Arguments:
+            r : float; interatomic distance
+            A : float; yukawa amplitude
+            xi : float; screening length
+        Returns:
+            float; interatomic non-bonded potential - long
+            range repulsion
+    """
+    return (A*np.exp(-r/xi))/(r/xi)
+
+def dyukawa(r, A=0.08, xi=12.0):
+    """	Arguments:
+            r : float; interatomic distance
+            A : float; yukawa amplitude
+            xi : float; screening length
+        Returns:
+            float; interatomic non-bonded potential - long
+            range repulsion
+    """
+    return (-A*np.exp(-r/xi)*(r+xi))/(r*r)
+
+def lj(r, eps=1.0, sigma=2.0, alpha=6):
+    """	Arguments:
+            r : float; interatomic distance
+            eps : float; strength
+            sigma : float; diameter of repulsive core
+            *alpha : float; attraction width
+        Returns:
+            float; interatomic non-bonded potential - short
+            range attraction
+    """
+    return 4*eps*((sigma/r)**(2*alpha) - (sigma/r)**(alpha))
+
+def dlj(r, eps=1.0, sigma=2.0, alpha=6):
+    """	Arguments:
+            r : float; interatomic distance
+            eps : float; strength
+            sigma : float; diameter of repulsive core
+            *alpha : float; attraction width
+        Returns:
+            float; interatomic non-bonded potential - short
+            range attraction
+    """
+    return (-4*alpha*eps*(sigma/r)**(alpha)*(2*(sigma/r)**(alpha) - 1))/r
+
+################################################################
+# Main
+################################################################
+
+def main(Arguments):
+    """	Arguments:
+            Arguments : dict; CLI arguments from docopt
+        Returns:
+            None
+    """
+    beginTime = timer()
+    ############################################################
+    Timestep = 2e-3
+    Xi  = 10.0
+    A   = 1.1
+    Eps = 2.15
+    Sig = 3.62
+    Alph= 18
+    F, dF = f, df
+    G, dG = yukawa, dyukawa
+    H, dH = lj, dlj
+    r0 = np.arange(0, Timestep*550, Timestep, dtype=np.float64)
+    zeros = np.zeros(r0.shape, dtype=np.float64)
+    r = np.arange(Timestep*550, 
+                  float(Arguments['--rcut'])+1+Timestep, 
+                  Timestep, 
+                  dtype=np.float64)
+    col2 = np.concatenate((zeros,  F(r)))
+    col3 = np.concatenate((zeros,-dF(r)))
+    col4 = np.concatenate((zeros,  G(r,A=A,xi=Xi)))
+    col5 = np.concatenate((zeros,-dG(r,A=A,xi=Xi)))
+    col6 = np.concatenate((zeros,  H(r,eps=Eps,sigma=Sig,alpha=Alph)))
+    col7 = np.concatenate((zeros,-dH(r,eps=Eps,sigma=Sig,alpha=Alph)))
+    col1 = np.concatenate((r0, r))
+    TableData = pd.DataFrame(np.array([col1, col2, col3,
+                                       col4, col5, col6,
+                                       col7]).T)
+    with open(os.path.abspath(Arguments['--output']), 'w') as F:
+        F.write("#\n# Table for Zr : A={},xi={},eps={},sig={},alph={}\n#\n".format(
+            A,Xi,Eps,Sig,Alph))
+        TableData.to_csv(F,
+                         sep=' ',
+                         float_format='%.10e',
+                         header=False,
+                         index=False,
+                         mode='w')
+    if Arguments['--plot']:
+        X = col1
+        LJ = col6
+        LJF = col7
+        LJY = col6+col4
+        LJYF = col5+col7
+        YUK = col4
+        plt.plot(X,LJY,'-',label='LJ w/ added Yukawa')
+        plt.plot(X,LJ,'-.',label='Typical LJ')
+        plt.plot(X,YUK,'-.',label='Just Yukawa force')
+        #plt.plot(X,LJYF,'-',label='Yukawa force')
+        #plt.plot(X,LJF,'-.',label='Typical LJ')
+        plt.axhline(-0.1163,linestyle='--')
+        plt.xlabel('r')
+        plt.ylabel('V(r)')
+        plt.title('SALR Potential')
+        plt.legend(loc='best')
+        if Arguments['--zoom']:
+            plt.axis([float(value) for value in Arguments['--zoom'].split(',')])
+        plt.show()
+    ############################################################
+    endTime = timer()
+    #if not Arguments['--quiet']:
+    #    print('Total time elapsed: {}'.format(
+    #        str(strftime('%H:%M:%S', gmtime(endTime - beginTime)))))
+
+################################################################
+if __name__ == "__main__":
+    args = docopt(__doc__,version=VERSION)
+    main(args)

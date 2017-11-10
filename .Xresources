@@ -1,0 +1,54 @@
+!#include "/home/nava/.config/base16-xresources/xresources/base16-3024-256.Xresources"
+!#include "/home/nava/.config/base16-xresources/xresources/base16-apathy-256.Xresources"
+#include "/home/nava/.config/base16-xresources/xresources/base16-paraiso-256.Xresources"
+
+backarrowKeyIsErase: true
+locale: true
+selectToClipboard:true
+xterm*bellIsUrgent: true  
+
+URxvt.perl-ext:
+URxvt.perl-ext-common: resize-font,osc-xterm-clipboard
+
+URxvt.font: xft:Source Code Pro:size=12
+URxvt.boldFont: xft:Source Code Pro:bold:size=12
+Xft.hintstyle: hintslight
+Xft.hinting: 1
+Xft.antialias: 1
+
+URxvt.resize-font.smaller: A-Left
+URxvt.resize-font.bigger: A-Right
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+  
+URxvt.scrollBar: false
+URxvt.letterSpace: 0
+  
+Xcursor.size : 16
+URxvt.internalBorder: 10
+
+!urxvt*depth: 32
+!urxvt*background: rgba:0000/0000/0200/c800
+!URxvt*.transparent: true
+!! URxvt*.inheritPixmap: true
+!! URxvt*.shading: 0 to 99 darkens, 101 to 200 lightens
+!URxvt*.shading: 30
+!URxvt*.shading: 80
+!URxvt*tintColor: Red
+!URxvt*.depth: 64
+
+! rofi theme
+rofi.color-enabled: true
+!                  bg       border   separator
+rofi.color-window: argb:d0282828, #a89984, #a89984
+!                  bg             fg       bg-alt   hl-bg    hl-fg
+rofi.color-normal: argb:d0282828, #ebdbb2, argb:d032302f, #665c54, #fbf1c7
+rofi.color-active: argb:d0d79921, #282828, argb:d0d79921, #fabd2f, #282828
+rofi.color-urgent: argb:d0cc241d, #282828, argb:d0cc241d, #fb4934, #282828
+
+rofi.separator-style: solid
+rofi.hide-scrollbar: true
+rofi.modi: window,run,ssh,drun
+rofi.show-icons: true
+rofi.lines: 7
+rofi.width: 700

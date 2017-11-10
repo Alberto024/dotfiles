@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mcnairKey=$(gdrive sync list --no-header | grep 'Mcnair-bak' | awk '{print $1}')
+gdrive sync upload --keep-local /home/nava/Mcnair "${mcnairKey}"

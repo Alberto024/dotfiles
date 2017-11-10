@@ -1,0 +1,3 @@
+#!/bin/bash
+
+notify-send -t 0 "$(/usr/bin/sdcv $1)"

@@ -1,0 +1,107 @@
+#! /bin/sh
+
+if xdo id -a "$PANEL_WM_NAME" > /dev/null ; then
+	printf "%s\n" "The panel is already running." >&2
+	exit 1
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+[ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+mkfifo "$PANEL_FIFO"
+
+bspc config top_padding $PANEL_HEIGHT
+bspc subscribe report > "$PANEL_FIFO" &
+xtitle -sf 'T%s' > "$PANEL_FIFO" &
+clock -sf 'S%a %m/%d/%y %I:%M%P' > "$PANEL_FIFO" &
+
+# THIS IS A BUTTON: the |+| is the icon in bar
+#echo 'L|+|' > $PANEL_FIFO &
+
+#Volume
+function Volume {
+    while true; do
+        volStatus=$(amixer get Master | tail -n 1 | cut -d '[' -f 4 | sed 's/].*//g')
+        volLevel=$(amixer get Master | tail -n 1 | cut -d '[' -f 2 | sed 's/%.*//g')
+        if [ $volStatus == "on" ]; then
+            volStatus=""
+        elif [ $volStatus == "off" ]; then
+            volStatus="MM"
+        fi
+        if [ $volStatus == "MM" ]; then
+            echo "XVOL:$volStatus  |"
+        else
+            echo "XVOL:$volLevel%  |"
+        fi
+        sleep 5
+    done
+}
+Volume > "$PANEL_FIFO" &
+
+#Battery
+BATF="/sys/class/power_supply/BAT0"
+Battery() {
+    while true; do
+        BATPERC=$(acpi --battery | cut -d, -f2 | cut -c2-)
+        STATUS=`cat $BATF/status`
+        if [ $STATUS == "Charging" ]; then
+            STATUS="++"
+        elif [ $STATUS == "Discharging" ]; then
+            STATUS="--"
+        else
+            STATUS=""
+        fi
+        echo "ZBAT:$BATPERC$STATUS  |"
+        sleep 30
+    done
+}
+Battery > "$PANEL_FIFO" &
+
+Cpuload() {
+    while true; do
+        LINE=`ps -eo pcpu | awk 'BEGIN {sum=0.0f} {sum+=$1} END {print sum}'`
+        echo "CCPU:$LINE%  |"
+        sleep 2
+    done
+}
+Cpuload > "$PANEL_FIFO" &
+
+Memory() {
+    while true; do
+        read t <<< `grep -E 'MemTotal' /proc/meminfo | awk '{print $2}'`
+        read f <<< `grep -E 'MemFree' /proc/meminfo | awk '{print $2}'`
+        MEM=$(bc <<< "scale=2; 100 - $f / $t * 100" | cut -d. -f1)
+        echo "RRAM:$MEM%  |"
+        sleep 2
+    done
+}
+Memory > "$PANEL_FIFO" &
+
+Network() {
+    while true; do
+        WIF=$(nmcli con show | grep wlp3s0 | awk '{print $1}')
+        if [ "${WIF}" == "" ]; then
+            ETH=$(nmcli con show | grep enp0s25 | awk '{print $1}')
+            echo "N|  NET:$ETH  |"
+        else
+            echo "N|  NET:$WIF  |"
+        fi
+        sleep 10
+    done
+}
+Network > "$PANEL_FIFO" &
+
+. panel_colors
+
+panel_bar < "$PANEL_FIFO" | lemonbar -a 32 -n "$PANEL_WM_NAME" -g x$PANEL_HEIGHT -f "$PANEL_FONT" -F "$COLOR_DEFAULT_FG" -B "$COLOR_DEFAULT_BG" | sh &
+
+wid=$(xdo id -a "$PANEL_WM_NAME")
+tries_left=20
+while [ -z "$wid" -a "$tries_left" -gt 0 ] ; do
+	sleep 0.05
+	wid=$(xdo id -a "$PANEL_WM_NAME")
+	tries_left=$((tries_left - 1))
+done
+[ -n "$wid" ] && xdo above -t "$(xdo id -N Bspwm -n root | sort | head -n 1)" "$wid"
+
+wait

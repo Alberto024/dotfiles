@@ -1,0 +1,31 @@
+#!/usr/bin/python3
+
+"""Usage:
+    Plot2d [options] <file>
+
+Options:
+    -h, --help
+        Show this screen and exit
+    --version
+        Show version and exit
+    -d <delimeter>
+        Use a different delimiter [default: ,]
+
+Example:
+    Plot2d -d '\t' my_tab_delimited_file.tab"""
+
+from docopt import docopt
+import pandas as pd
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+
+def main(args):
+    Data = pd.read_csv(args['<file>'], sep=args['-d'], header=None)
+    fig = plt.figure()
+    plt.plot(Data[0], Data[1],'o-')
+    plt.title(args['<file>'])
+    plt.show()
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__,version='Plot2d version 1.0\nAuthor: Alberto Nava')
+    main(arguments)

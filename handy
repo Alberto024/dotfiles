@@ -154,3 +154,55 @@ gdrive help     for google drive
 
 latexmk -pvc -pdf main.tex
 evince main.pdf
+
+
+select text with v and then :w! >> /path/to/file    to append to file
+
+egrep '@' ReferenceAssignment.bib | cut -d '{' -f 2 | tr -d ',' | awk '{printf("\\cite\{%s\}\n", $1)}' >> main.tex
+
+pdfcrop --margins '-5 -5 -5 -5' input.pdf output.pdf
+crops pdf from left, top, right, bottom
+
+big compy: Blackie6
+
+awk -v N=1 '{ sum += $N } END { if (NR > 0) print sum/NR}' # Take average of column N
+
+zip -r toname.zip foldertozip/  # To zip
+lrztar -p 4 foldertocompress/   # Best compression
+tar czf toname.tar.gz folder/   # Fast default compression
+
+unzip filename                  # To unzip
+lrztar -d -p 4 name.tar.lrz     # To unlrztar
+tar xzf name.tar.gz             # To untar and ungz
+
+pd.merge(df1, df2, how='outer', on=['country','income'])
+
+vmd:
+to save a selection, open tkconsole:
+set variablename [atomselect top "name C5' and chain A"]
+$variablename writepdb newname.pdb
+    top is reference frame of current vizualization
+
+gnuplot
+set terminal dumb size 60, 30
+set autoscale
+unset key
+plot 'space separated file' using 1:2 with lines
+
+vim: 
+set spell to turn on spell checking
+z= to suggest spelling
+zg to add word to dictionary
+
+to log vmd: in TCL
+> logfile "filename"
+
+sudo vim /etc/pacman.conf
+Add packages to IgnorePkg Section to avoid update
+
+lpc status <- to show available printers
+
+Print between two expressions:
+awk '/Motivation:/{flag=1;next}/footnotesize/{flag=0}flag' main.tex
+
+crontab -l

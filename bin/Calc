@@ -1,0 +1,6 @@
+#!/usr/bin/python3
+
+import sys
+from math import *
+
+print(f"{sys.argv[1]} = \n\t{eval(sys.argv[1]):,}")

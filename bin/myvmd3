@@ -1,0 +1,3 @@
+#!/bin/bash
+filename=$1
+vmd -e /home/nava/Project/dpd-scripts/fixpbc_startup3.vmd "${filename}"

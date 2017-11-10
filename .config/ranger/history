@@ -1,0 +1,50 @@
+find sta
+search stardi
+rename Assignment7.pdf
+shell tar xzf Proj1.tgz
+shell mkdir Screenshots
+rename DriverFile.png
+rename InputAndOutputOperator.png
+rename OverloadedAddition.png
+rename Addition.png
+rename Subtraction.png
+rename Multiplication.png
+rename Equality.png
+rename eval.png
+rename differentiation.png
+rename indef_int.png
+rename def_int.png
+rename copyconstruct.png
+rename overloadedconstruct.png
+rename Equality2.png
+p
+rename Background-99.jpg
+rename Background-97.jpg
+rename EssayTemplate.tex
+shell 
+shell mkdir chrome
+shell vim userChrome.css
+rename Assignment7-due07nov2017.doc
+shell mkdir HW8
+rename HW8.pdf
+rename RD5
+shell mkdir RD3
+search usr
+search 
+search libfluid
+search //
+search Supe
+rename .asoundrc.bak
+search py
+search site
+search T
+search
+search Fox
+shell mkdir Proj3
+open_with 
+shell mkdir Official
+rename AlbertoNava_OfficialTranscript.pdf
+rename AlbertoNava_UNR-Official-Transcript.pdf
+open_with
+shell mkdir Results
+delete
